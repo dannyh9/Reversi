@@ -1,0 +1,12 @@
+﻿body {
+            font: 12pt Arial bold
+        }
+
+        .rboard {
+            border-collapse: collapse;
+            border: 4px solid black
+        }
+
+        .rsquare {
+            border: 4px solid black
+        }
