@@ -1,0 +1,43 @@
+﻿@page
+@model Pages.RegisterModel
+@{
+}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="height:300px">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" autocomplete="off">
+                        <h1> Registreer </h1>
+                        <div class="LoginError">
+                            @if (ViewData["bericht"] != null || ViewData["bericht"] != "")
+                            {
+                                <p>@ViewData["bericht"]</p>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Gebruikersnaam *</label>
+                            <input type="text" class="form-control" id="username" name="Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Wachtwoord *</label>
+                            <input type="password" class="form-control" name="Password" id="password">
+                        </div>
+                        <div class="form-group">
+                            <label for="password2"> Herhaal wachtwoord *</label>
+                            <input type="password" class="form-control" name="Password2" id="password2">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" class="form-control" name="Email" id="email">
+                        </div>
+
+                        <button type="submit" id="register" class="btn btn-primary">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

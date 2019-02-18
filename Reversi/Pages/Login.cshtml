@@ -1,0 +1,45 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+
+}
+@if (ViewData["login"] != "true")
+{
+
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="height:300px">
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post" autocomplete="off">
+                            <h1> Login </h1>
+                            <div class="LoginError">
+                                @if (ViewData["Error"] != null || ViewData["Error"] != "")
+                                {
+                                    <p>@ViewData["Error"]</p>
+                                }
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="Username" placeholder="gebruikersnaam">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="Password" placeholder="wachtwoord">
+                            </div>
+
+                            <button type="submit" id="sendlogin" class="btn btn-primary">login</button>
+                            <p class="small" style="margin-top:25px;"> Nog geen account? klik <a href="/Register"> hier </a></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <form method="post" autocomplete="off">
+        <p> U bent al ingelogd , Klik hier om uit te loggen</p>
+        <button class="btn btn-default" asp-page-handler="logout">Uitloggen</button>
+    </form>
+        }
