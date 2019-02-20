@@ -13,4 +13,14 @@
 <div class="text-center">
     <h1 class="display-4">Welcome @ViewData["Username"]</h1>
     <!-- <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>-->
+    <form method="post">
+        <div class="form-group">
+            <label for="games">Selecteer een spel of maak een nieuw spel aan:</label>
+            <select class="form-control" id="games" name="game">
+                <option value="new">maake nieuw spel</option>
+                <!-- TODO foreach voor games -->
+            </select>
+        </div>
+        <input type="submit" value="Speel" />
+    </form>
 </div>

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reversi", "..\Reversi\Reversi.csproj", "{A50CC28A-5201-41B1-A92D-6808B4ABAA77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReversiTests", "ReversiTests\ReversiTests.csproj", "{68E5BCCE-0A56-4CC2-8A68-FA6265960C76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A50CC28A-5201-41B1-A92D-6808B4ABAA77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A50CC28A-5201-41B1-A92D-6808B4ABAA77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A50CC28A-5201-41B1-A92D-6808B4ABAA77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68E5BCCE-0A56-4CC2-8A68-FA6265960C76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68E5BCCE-0A56-4CC2-8A68-FA6265960C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68E5BCCE-0A56-4CC2-8A68-FA6265960C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68E5BCCE-0A56-4CC2-8A68-FA6265960C76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

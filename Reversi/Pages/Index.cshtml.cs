@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Reversi.Controllers;
 
 namespace Reversi.Pages
 {
@@ -15,6 +16,10 @@ namespace Reversi.Pages
         {
             string username = HttpContext.Session.GetString("login");
             ViewData["Username"] = username;
+
+            //GameController game = new GameController();
         }
-    }
+        public void OnPost(string game)
+        {
+        }
 }
