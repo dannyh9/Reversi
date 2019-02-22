@@ -11,7 +11,7 @@ namespace Reversi.Pages
 {
     public class IndexModel : PageModel
     {
-       
+
         public void OnGet()
         {
             string username = HttpContext.Session.GetString("login");
@@ -21,5 +21,16 @@ namespace Reversi.Pages
         }
         public void OnPost(string game)
         {
+            if(game == "new")
+            {
+                GameController gameController = new GameController();
+                //TODO game data to screen
+            }
+            else
+            {
+
+            }
         }
+    }
+
 }
