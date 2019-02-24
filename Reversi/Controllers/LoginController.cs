@@ -1,8 +1,10 @@
-﻿using Reversi.Models;
+﻿using Microsoft.AspNetCore.Http;
+using Reversi.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace Reversi.Controllers
@@ -13,6 +15,7 @@ namespace Reversi.Controllers
         public string Role { get; set; }
         public bool returnbool = false;
         public string ReturnMsg { get; set; }
+        public Guid token { get; set; }
 
         public Boolean HandleLogin(string username, string password)
         {
@@ -82,6 +85,36 @@ namespace Reversi.Controllers
             }
             //return returnbool;
 
+        }
+
+        public void HandleLostPassword(string email)
+        {
+            token = Guid.NewGuid();
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+
+                mail.From = new MailAddress("dannyreversi@gmail.com");
+                mail.To.Add(email);
+                mail.Subject = "Wachtwoord reset Reversi";
+                mail.Body = "Klik op onderstaande link om het wachtwoord te resetten deze link is 30 minuten geldig <br> " +
+                    " <a href='https://localhost:44323/Lost?token="+token+"'> reset wachtwoord </a> ";
+                //TODO url + controlle
+
+                SmtpServer.Port = 587;
+                SmtpServer.Credentials = new System.Net.NetworkCredential("dannyreversi@gmail.com", "0645604582");
+                SmtpServer.EnableSsl = true;
+
+                SmtpServer.Send(mail);
+                
+
+                ReturnMsg = "Wachtwoord reset mail verzonden, de mail is 30 minuten geldig.";
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.ToString());
+            }
         }
     }
 }
