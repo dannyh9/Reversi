@@ -29,7 +29,7 @@ namespace Reversi.Pages
             bool login = Logincontroller.HandleLogin(Username, Password);
             if (login == true)
             {
-                HttpContext.Session.SetString("login", Logincontroller.Username);
+                HttpContext.Session.SetString("login", Logincontroller.loginModel.Username);
                 Response.Redirect("Index");
             }
             else

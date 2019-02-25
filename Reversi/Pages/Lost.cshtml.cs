@@ -18,6 +18,8 @@ namespace Reversi.Pages
                 if(HttpContext.Request.Query["token"].ToString() == HttpContext.Session.GetString("token"))
                 {
                     ViewData["validToken"] = "true";
+
+                    ViewData["email"] = HttpContext.Session.GetString("email");
                 }
             }
         }
@@ -28,21 +30,19 @@ namespace Reversi.Pages
             LoginController Logincontroller = new LoginController();
             Logincontroller.HandleLostPassword(Email);
 
-            HttpContext.Session.SetString("token", Logincontroller.token.ToString());
+            HttpContext.Session.SetString("token", Logincontroller.loginModel.token.ToString());
+            HttpContext.Session.SetString("email", Email);
 
-            ViewData["msg"] = Logincontroller.ReturnMsg;
+            ViewData["msg"] = Logincontroller.loginModel.ReturnMsg;
 
-            //    if (login == true)
-            //    {
-            //        HttpContext.Session.SetString("login", Logincontroller.Username);
-            //        Response.Redirect("Index");
-            //    }
-            //    else
-            //    {
-            //        loginmsg = "invalid username or password";
-            //        ViewData["Error"] = loginmsg;
-            //    }
+        }
+        public void OnPostReset(string password1, string password2,string email)
+        {
+            LoginController Logincontroller = new LoginController();
 
+            
+            Logincontroller.ChangePassword(password1, password2, email);
+            ViewData["msg"] = Logincontroller.loginModel.ReturnMsg;
         }
     }
 }

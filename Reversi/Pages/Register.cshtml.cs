@@ -18,8 +18,8 @@ namespace Reversi.Pages
             LoginController Logincontroller = new LoginController();
             Logincontroller.HandleRegister(Username, Password, Password2, Email);
             
-            if(Logincontroller.ReturnMsg != null)
-            ViewData["bericht"] = Logincontroller.ReturnMsg;
+            if(Logincontroller.loginModel.ReturnMsg != null)
+            ViewData["bericht"] = Logincontroller.loginModel.ReturnMsg;
 
 
             //LoginController Logincontroller = new LoginController();
