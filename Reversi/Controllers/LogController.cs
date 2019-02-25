@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -10,20 +11,23 @@ using Reversi.Models;
 
 namespace Reversi.Controllers
 {
-    public class LogController : Controller
+    public class LogController
     {
-        private readonly LogContext _context;
+        public SqlConnection con = new SqlConnection(DatabaseModel.connectionString);
 
-        public LogController()
+        public void addToLog(string name, string details)
         {
+            string DateTime = System.DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+            con.Open();
+            SqlCommand cmd = new SqlCommand("INSERT INTO Log (Name, Details,Time) VALUES(@name,@details,@time)", con);
+            cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@details", details);
+            cmd.Parameters.AddWithValue("@time", DateTime);
+
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            con.Close();
         }
-
-        public LogController(LogContext context) => _context = context;
-
-        public List<LogModel> getLog ()
-        {
-            return _context.Log.ToList();
-        }
-
     }
 }

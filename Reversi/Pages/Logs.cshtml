@@ -1,0 +1,30 @@
+﻿@page
+@model Reversi.Pages.LogsModel
+@{
+}
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#id</th>
+            <th scope="col">Naam</th>
+            <th scope="col">Details</th>
+            <th scope="col">Tijs</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.list)
+        {
+        <tr>
+            <th scope="row">
+                @item.LogId
+            </th>
+            <td>@item.Name</td>
+            <td>@item.Details</td>
+            <td>@item.Time</td>
+        </tr>
+        }
+    </tbody>
+</table>

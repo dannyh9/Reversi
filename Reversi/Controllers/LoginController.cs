@@ -15,6 +15,9 @@ namespace Reversi.Controllers
     {
         public LoginModel loginModel = new LoginModel();
 
+        LogController Logcontroller = new LogController();
+        
+
         public SqlConnection con = new SqlConnection(DatabaseModel.connectionString);
 
         public Boolean HandleLogin(string username, string password)
@@ -38,7 +41,11 @@ namespace Reversi.Controllers
                         loginModel.returnbool = true;
                     }
                     else
+                    {
                         loginModel.returnbool = false;
+                        Logcontroller.addToLog(username, "voert verkeerde wachtwoord in");
+                    }
+                        
                 }
                 else
                     loginModel.returnbool = false;
@@ -105,6 +112,7 @@ namespace Reversi.Controllers
                     cmd.ExecuteNonQuery();
                     cmd.Dispose();
                     loginModel.ReturnMsg = "Account aangemaakt";
+                    Logcontroller.addToLog(username, "Account aangemaakt");
                 }
                 reader.Close();
                 reader.Dispose();
@@ -127,6 +135,7 @@ namespace Reversi.Controllers
                 if (reader.Read()) {
                     //send mail if mail is in database
                     SendRecoveryMail(email);
+                    Logcontroller.addToLog(email, "Vergeten wachtwoord opgevraagd en mail verzonden");
                 }
                 else
                 {
@@ -193,16 +202,28 @@ namespace Reversi.Controllers
             }
             else
             {
-                //wachtwoord zijn goed
-                con.Open();
-                SqlCommand cmd = new SqlCommand("UPDATE Users SET Password=@password WHERE Username=@username", con);
-                cmd.Parameters.AddWithValue("@password", SHA512(password1));
-                cmd.Parameters.AddWithValue("@username", username);
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.ExecuteNonQuery();
-                cmd.Dispose();
-                con.Close();
-                loginModel.ReturnMsg = "Wachtwoord is aangepast";
+                if (password1.Length < 10)
+                {
+                    loginModel.ReturnMsg = "wachtwoord moet minimaal 10 tekens bevatten";
+                }else if (!password1.Any(char.IsUpper) || !password1.Any(char.IsLower) || !password1.Any(char.IsNumber))
+                {
+                    loginModel.ReturnMsg = "wachtwoord moet minimaal een hoofdletter, een kleineletter en een nummber bevatten";
+                }else
+                {
+                    //wachtwoord zijn goed
+                    con.Open();
+                    SqlCommand cmd = new SqlCommand("UPDATE Users SET Password=@password WHERE Username=@username", con);
+                    cmd.Parameters.AddWithValue("@password", SHA512(password1));
+                    cmd.Parameters.AddWithValue("@username", username);
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.ExecuteNonQuery();
+                    cmd.Dispose();
+                    con.Close();
+                    loginModel.ReturnMsg = "Wachtwoord is aangepast";
+                    Logcontroller.addToLog(username, "Wachtwoord is aangepast");
+                }
+                
+           
             }
         }
 
