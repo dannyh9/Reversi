@@ -28,7 +28,7 @@ namespace Reversi.Pages
             }
         }
 
-        public void OnPost(string Username, string Password)
+        public void OnPost(string Username, string Password, string verify)
         {
             if (!ReCaptchaPassed(Request.Form["g-recaptcha-response"], "6LdY4pMUAAAAAHnVKHn4WS-qsDHqrrQABJxCQ6vk"))
             {
@@ -46,11 +46,24 @@ namespace Reversi.Pages
                     }
                     else
                     {
-                        HttpContext.Session.SetString("login", Logincontroller.loginModel.Username);
-                        HttpContext.Session.SetString("role", Logincontroller.loginModel.Role.ToString());
-                        Response.Redirect("Index");
+                        if(verify == "Yes")
+                        {
+                            Random generator = new Random();
+                            string randomnumber = generator.Next(0, 999999).ToString("D6");
+                            HttpContext.Session.SetString("verify", randomnumber);
+                            Logincontroller.SendVerifyMail(Logincontroller.loginModel.Email, randomnumber);
+                            HttpContext.Session.SetString("loginnotverifyd", Logincontroller.loginModel.Username);
+                            HttpContext.Session.SetString("rolenotverifyd", Logincontroller.loginModel.Role.ToString());
+                            Response.Redirect("VerifyLogin");
+                        }
+                        else
+                        {
+                            HttpContext.Session.SetString("login", Logincontroller.loginModel.Username);
+                            HttpContext.Session.SetString("role", Logincontroller.loginModel.Role.ToString());
+                            Response.Redirect("Index");
+                        }
+                        
                     }
-
                 }
                 else
                 {

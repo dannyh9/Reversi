@@ -38,6 +38,7 @@ namespace Reversi.Controllers
 
                         loginModel.Username = reader["Username"].ToString();
                         loginModel.Role = int.Parse(reader["Role"].ToString());
+                        loginModel.Email = reader["Email"].ToString();
                         loginModel.returnbool = true;
                     }
                     else
@@ -248,6 +249,24 @@ namespace Reversi.Controllers
                 
            
             }
+        }
+
+        public void SendVerifyMail(string email, string randomNumber)
+        {
+            MailMessage mail = new MailMessage();
+            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+
+            mail.From = new MailAddress("dannyreversi@gmail.com");
+            mail.To.Add(email);
+            mail.Subject = "2Fa Reversi";
+            mail.Body = "Code : " + randomNumber;
+
+            SmtpServer.Port = 587;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("dannyreversi@gmail.com", "0645604582");
+            SmtpServer.EnableSsl = true;
+
+            SmtpServer.Send(mail);
+            loginModel.ReturnMsg = "2Fa mail verzonden naar "+ this.loginModel.Email;
         }
 
         public static string SHA512(string text)
