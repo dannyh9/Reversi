@@ -6,7 +6,7 @@
 }
 @if (ViewData["login"] != "true")
 {
-
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.unobtrusive-ajax.min.js"></script>
     <div class="container">
         <div class="row justify-content-center align-items-center" style="height:300px">
             <div class="col-4">
@@ -26,7 +26,9 @@
                             <div class="form-group">
                                 <input type="password" class="form-control" name="Password" placeholder="wachtwoord">
                             </div>
-
+                            <div class="form-group">
+                                <div class="g-recaptcha" data-sitekey="@ViewData["ReCaptchaKey"]"></div>
+                            </div>
                             <button type="submit" id="sendlogin" class="btn btn-primary">login</button>
                             <p class="small" style="margin-top:25px;"> Nog geen account? klik <a href="/Register"> hier </a></p>
                             <p class="small" style="margin-top:25px;"> Wachtwoord vergeten? klik <a href="/Lost"> hier </a></p>
@@ -44,6 +46,6 @@ else
         <button class="btn btn-default" asp-page-handler="logout">Uitloggen</button>
 
         <p> Klik <a href="/Change">hier</a> om uw wachtwoord aan te passen</p>
-        
+
     </form>
 }

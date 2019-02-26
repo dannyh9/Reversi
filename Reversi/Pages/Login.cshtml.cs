@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using Reversi.Controllers;
 
 namespace Reversi.Pages
@@ -17,6 +21,7 @@ namespace Reversi.Pages
         public string loginmsg = "";
         public void OnGet()
         {
+            ViewData["ReCaptchaKey"] = "6LdY4pMUAAAAABBM6NEpvhbBqW2gH6L_QUdoiIFa";
             if (HttpContext.Session.GetString("login") != null)
             {
                 ViewData["login"] = "true";
@@ -25,18 +30,26 @@ namespace Reversi.Pages
 
         public void OnPost(string Username, string Password)
         {
-            LoginController Logincontroller = new LoginController();
-            bool login = Logincontroller.HandleLogin(Username, Password);
-            if (login == true)
+            if (!ReCaptchaPassed(Request.Form["g-recaptcha-response"], "6LdY4pMUAAAAAHnVKHn4WS-qsDHqrrQABJxCQ6vk"))
             {
-                HttpContext.Session.SetString("login", Logincontroller.loginModel.Username);
-                Response.Redirect("Index");
-            }
-            else
+                ModelState.AddModelError(string.Empty, "You failed the CAPTCHA");
+            } else
             {
-                loginmsg = "invalid username or password";
-                ViewData["Error"] = loginmsg;
+                LoginController Logincontroller = new LoginController();
+                bool login = Logincontroller.HandleLogin(Username, Password);
+                if (login == true)
+                {
+                    HttpContext.Session.SetString("login", Logincontroller.loginModel.Username);
+                    HttpContext.Session.SetString("role", Logincontroller.loginModel.Role.ToString());
+                    Response.Redirect("Index");
+                }
+                else
+                {
+                    loginmsg = "invalid username or password";
+                    ViewData["Error"] = loginmsg;
+                }
             }
+            
 
         }
 
@@ -44,6 +57,25 @@ namespace Reversi.Pages
         {
             HttpContext.Session.Clear();
             Response.Redirect("Login");
+        }
+
+        public static bool ReCaptchaPassed(string gRecaptchaResponse, string secret)
+        {
+            HttpClient httpClient = new HttpClient();
+            var res = httpClient.GetAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={gRecaptchaResponse}").Result;
+            if (res.StatusCode != HttpStatusCode.OK)
+            {
+                return false;
+            }
+
+            string JSONres = res.Content.ReadAsStringAsync().Result;
+            dynamic JSONdata = JObject.Parse(JSONres);
+            if (JSONdata.success != "true")
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Reversi.Models
     public class LoginModel
     {
         public string Username { get; set; }
-        public string Role { get; set; }
+        public int Role { get; set; }
         public bool returnbool = false;
         public string ReturnMsg { get; set; }
         public Guid token { get; set; }

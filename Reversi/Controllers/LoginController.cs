@@ -37,7 +37,7 @@ namespace Reversi.Controllers
                     {
 
                         loginModel.Username = reader["Username"].ToString();
-                        loginModel.Role = reader["Role"].ToString();
+                        loginModel.Role = int.Parse(reader["Role"].ToString());
                         loginModel.returnbool = true;
                     }
                     else
@@ -100,19 +100,30 @@ namespace Reversi.Controllers
                 }
                 else
                 {
-                    reader.Close();
-                    reader.Dispose();
-                    cmd2.Dispose();
-                    //maak account aan als username of email niet bestaat
-                    SqlCommand cmd = new SqlCommand("INSERT INTO Users (Username, Password, Email) VALUES(@username,@password,@email)", con);
-                    cmd.Parameters.AddWithValue("@username", username);
-                    cmd.Parameters.AddWithValue("@password", SHA512(password));
-                    cmd.Parameters.AddWithValue("@email", email);
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.ExecuteNonQuery();
-                    cmd.Dispose();
-                    loginModel.ReturnMsg = "Account aangemaakt";
-                    Logcontroller.addToLog(username, "Account aangemaakt");
+
+                    if (password.Length < 10)
+                    {
+                        loginModel.ReturnMsg = "wachtwoord moet minimaal 10 tekens bevatten";
+                    }
+                    else if (!password.Any(char.IsUpper) || !password.Any(char.IsLower) || !password.Any(char.IsNumber))
+                    {
+                        loginModel.ReturnMsg = "wachtwoord moet minimaal een hoofdletter, een kleineletter en een nummber bevatten";
+                    }
+                    else
+                    {
+                        //wachtwoord zijn goed
+                        con.Open();
+                        SqlCommand cmd = new SqlCommand("INSERT INTO Users (Username, Password, Email) VALUES(@username,@password,@email)", con);
+                        cmd.Parameters.AddWithValue("@username", username);
+                        cmd.Parameters.AddWithValue("@password", SHA512(password));
+                        cmd.Parameters.AddWithValue("@email", email);
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        cmd.ExecuteNonQuery();
+                        cmd.Dispose();
+                        con.Close();
+                        loginModel.ReturnMsg = "Wachtwoord is aangepast";
+                        Logcontroller.addToLog(email, "Wachtwoord is aangepast");
+                    }
                 }
                 reader.Close();
                 reader.Dispose();
@@ -181,16 +192,28 @@ namespace Reversi.Controllers
                 loginModel.ReturnMsg = "wachtwoorden komen niet overeen of zijn niet ingevuld";
             }else
             {
-                //wachtwoord zijn goed
-                con.Open();
-                SqlCommand cmd = new SqlCommand("UPDATE Users SET Password=@password WHERE Email=@email", con);
-                cmd.Parameters.AddWithValue("@password", password1);
-                cmd.Parameters.AddWithValue("@email", email);
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.ExecuteNonQuery();
-                cmd.Dispose();
-                con.Close();
-                loginModel.ReturnMsg = "Wachtwoord is aangepast";
+                if (password1.Length < 10)
+                {
+                    loginModel.ReturnMsg = "wachtwoord moet minimaal 10 tekens bevatten";
+                }
+                else if (!password1.Any(char.IsUpper) || !password1.Any(char.IsLower) || !password1.Any(char.IsNumber))
+                {
+                    loginModel.ReturnMsg = "wachtwoord moet minimaal een hoofdletter, een kleineletter en een nummber bevatten";
+                }
+                else
+                {
+                    //wachtwoord zijn goed
+                    con.Open();
+                    SqlCommand cmd = new SqlCommand("UPDATE Users SET Password=@password WHERE Email=@email", con);
+                    cmd.Parameters.AddWithValue("@password", SHA512(password1));
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.ExecuteNonQuery();
+                    cmd.Dispose();
+                    con.Close();
+                    loginModel.ReturnMsg = "Wachtwoord is aangepast";
+                    Logcontroller.addToLog(email, "Wachtwoord is aangepast");
+                }
             }
         }
 

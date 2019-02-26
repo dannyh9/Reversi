@@ -13,12 +13,19 @@ namespace Reversi.Pages
     {
         public void OnGet()
         {
-            string username = HttpContext.Session.GetString("login");
-            ViewData["Username"] = username;
+            if (HttpContext.Session.GetString("role") == null)
+            {
+                Response.Redirect("Login");
+            }
         }
         public void OnPost(string password1, string password2)
         {
             LoginController Logincontroller = new LoginController();
+
+            if (HttpContext.Session.GetString("login") == null)
+            {
+                Response.Redirect("Login");
+            }
 
             Logincontroller.ChangePasswordUsername(password1, password2, HttpContext.Session.GetString("login"));
             ViewData["msg"] = Logincontroller.loginModel.ReturnMsg;
