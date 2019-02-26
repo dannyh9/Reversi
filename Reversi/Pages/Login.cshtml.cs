@@ -33,49 +33,57 @@ namespace Reversi.Pages
             if (!ReCaptchaPassed(Request.Form["g-recaptcha-response"], "6LdY4pMUAAAAAHnVKHn4WS-qsDHqrrQABJxCQ6vk"))
             {
                 ModelState.AddModelError(string.Empty, "You failed the CAPTCHA");
-            } else
+            }
+            else
             {
                 LoginController Logincontroller = new LoginController();
                 bool login = Logincontroller.HandleLogin(Username, Password);
                 if (login == true)
                 {
-                    HttpContext.Session.SetString("login", Logincontroller.loginModel.Username);
-                    HttpContext.Session.SetString("role", Logincontroller.loginModel.Role.ToString());
-                    Response.Redirect("Index");
+                    if (Logincontroller.loginModel.Role.ToString() == "0")
+                    {
+                        ViewData["Error"] = "Uw account is gearchiveerd, neem contact op met een administrator";
+                    }
+                    else
+                    {
+                        HttpContext.Session.SetString("login", Logincontroller.loginModel.Username);
+                        HttpContext.Session.SetString("role", Logincontroller.loginModel.Role.ToString());
+                        Response.Redirect("Index");
+                    }
+
                 }
                 else
                 {
                     loginmsg = "invalid username or password";
                     ViewData["Error"] = loginmsg;
                 }
-            }
-            
 
+            }
         }
 
-        public void OnPostLogout()
-        {
-            HttpContext.Session.Clear();
-            Response.Redirect("Login");
-        }
-
-        public static bool ReCaptchaPassed(string gRecaptchaResponse, string secret)
-        {
-            HttpClient httpClient = new HttpClient();
-            var res = httpClient.GetAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={gRecaptchaResponse}").Result;
-            if (res.StatusCode != HttpStatusCode.OK)
+            public void OnPostLogout()
             {
-                return false;
+                HttpContext.Session.Clear();
+                Response.Redirect("Login");
             }
 
-            string JSONres = res.Content.ReadAsStringAsync().Result;
-            dynamic JSONdata = JObject.Parse(JSONres);
-            if (JSONdata.success != "true")
+            public static bool ReCaptchaPassed(string gRecaptchaResponse, string secret)
             {
-                return false;
-            }
+                HttpClient httpClient = new HttpClient();
+                var res = httpClient.GetAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={gRecaptchaResponse}").Result;
+                if (res.StatusCode != HttpStatusCode.OK)
+                {
+                    return false;
+                }
 
-            return true;
+                string JSONres = res.Content.ReadAsStringAsync().Result;
+                dynamic JSONdata = JObject.Parse(JSONres);
+                if (JSONdata.success != "true")
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
     }
-}

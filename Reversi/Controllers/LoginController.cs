@@ -263,7 +263,7 @@ namespace Reversi.Controllers
             return result;
         }
 
-        private static string GenerateHashString(HashAlgorithm algo, string text)
+        public static string GenerateHashString(HashAlgorithm algo, string text)
         {
             // Compute hash from text parameter
             algo.ComputeHash(Encoding.UTF8.GetBytes(text));

@@ -2,12 +2,6 @@
 @model Reversi.Pages.ChangeModel
 @{
     ViewData["Title"] = "Change password page";
-
-    //string username = Request.Cookies["Username"];
-    if (ViewData["Username"] == null && ViewData["msg"] == null)
-    {
-        Response.Redirect("Login");
-    }
 }
 
 

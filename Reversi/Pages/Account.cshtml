@@ -1,6 +1,63 @@
 ﻿@page
-@model Reversi.Pages.AccountModel
+@model Reversi.Pages.AccountsModel
 @{
+    @using Microsoft.AspNetCore.Http
 }
 
 <p> Klik <a href="/Change">hier</a> om uw wachtwoord aan te passen</p>
+
+@if (ViewData["role"].ToString() == "3")
+{
+    <h1>Accounts</h1>
+    <a href="/CreateAccount">Maak een account aan</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Gebruikersnaam</th>
+                <th scope="col">Email</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Bewerken</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.list)
+            {
+                <tr>
+                    <th scope="row">
+                        @item.Id
+                    </th>
+                    <td>
+                        @item.Username
+                    </td>
+                    <td>
+                        @item.Email
+                    </td>
+                    <td>
+                        @if (item.Role == 0)
+                        {
+                            <p>Gearchiveerd</p>
+                        }
+                        else if (item.Role == 1)
+                        {
+                            <p>Gebruiker</p>
+                        }
+                        else if (item.Role == 2)
+                        {
+                            <p>Helpdesk</p>
+                        }
+                        else if (item.Role == 3)
+                        {
+                            <p>Administrator</p>
+                        }
+                    </td>
+                    <td>
+                        <a href="/EditAccount?id=@item.Id">aanpassen</a>
+                        <a href="/DeleteAccount?id=@item.Id" onclick="return confirm('Weet u zeker dat u gebruiker: '+@item.Username+' wilt verwijderen');">Verwijder account</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
