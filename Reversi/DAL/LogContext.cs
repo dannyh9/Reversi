@@ -11,5 +11,6 @@ namespace Reversi.DAL
     {
         public LogContext(DbContextOptions<LogContext> options) : base(options){ }
         public DbSet<LogModel> Log { get; set; }
+        public DbSet<GameModel> Games { get; set; }
     }
 }

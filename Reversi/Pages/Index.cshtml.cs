@@ -6,31 +6,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Reversi.Controllers;
+using Reversi.DAL;
+using Reversi.Models;
 
 namespace Reversi.Pages
 {
     public class IndexModel : PageModel
     {
+        public string Error { get; set; }
+
+        private readonly LogContext _context;
+
+        public IndexModel(LogContext context) => _context = context;
+
+        public List<GameModel> gamesList { get; set; }
 
         public void OnGet()
         {
+            Error = "";
             string username = HttpContext.Session.GetString("login");
             ViewData["Username"] = username;
-
-            //GameController game = new GameController();
+            gamesList = _context.Games.ToList();
         }
-        public void OnPost(string game)
-        {
-            if(game == "new")
-            {
-                GameController gameController = new GameController();
-                //TODO game data to screen
-            }
-            else
-            {
 
-            }
-        }
+        //TODO GET current game. 
+
+        //GameController game = new GameController();
     }
-
 }

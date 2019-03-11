@@ -6,21 +6,61 @@
     //string username = Request.Cookies["Username"];
     if(ViewData["Username"] == null)
     {
-    Response.Redirect("Login");
+        ViewData["Username"] = "test";
+        //Response.Redirect("Login");
     }
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome @ViewData["Username"]</h1>
-    <!-- <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>-->
-    <form method="post">
-        <div class="form-group">
-            <label for="games">Selecteer een spel of maak een nieuw spel aan:</label>
-            <select class="form-control" id="games" name="game">
-                <option value="new">maake nieuw spel</option>
-                <!-- TODO foreach voor games -->
-            </select>
+<div class="container">
+    <div class="text-center">
+        <h1 class="display-4">Welcome @ViewData["Username"]</h1>
+        <!-- <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>-->
+        <!-- TODO foreach voor games -->
+    </div>
+    <div class="gameFinder">
+        <form method="post">
+            <div class="form-group">
+                <label for="games">maak een nieuw spel aan:</label>
+                <input id="newGame" type="text" class="form-control" name="game" placeholder="Spel naam">
+                <input id="spelerId" type="hidden" class="form-control" name="spelerId" value="1">
+            </div>
+            <button type="button" class="btn btn-primary" id="newGameButton">Maak spel aan</button>
+        </form>
+        <h2 style="text-align:center;"> Speel mee met een van de huidige games!</h2>
+        <div style="margin-top:20px;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Spel nummer</th>
+                        <th scope="col">Naam</th>
+                        <th scope="col">Speel mee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.gamesList)
+                    {
+                        <tr>
+                            <th scope="row">
+                                @item.GameId
+                            </th>
+                            <td>@item.Name</td>
+                            <td><button data-id="@item.GameId" class="joinGameButton"> Speel mee </button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-        <input type="submit" value="Speel" />
-    </form>
+    </div>
+
+    <div class="game" style="display:none;">
+        <div class="buttons">
+            <p>kies een kleur:</p>
+            <button class='white'>wit</button>
+            <button class='black'>zwart</button>
+            <p class='currentcolor'></p>
+        </div>
+        <div class="gameScreen">
+
+        </div>
+    </div>
 </div>
+

@@ -21,20 +21,6 @@ namespace Reversi.Pages
             if(Logincontroller.loginModel.ReturnMsg != null)
             ViewData["bericht"] = Logincontroller.loginModel.ReturnMsg;
 
-
-            //LoginController Logincontroller = new LoginController();
-
-            //if (login == true)
-            //{
-            //    HttpContext.Session.SetString("login", Logincontroller.Username);
-            //    Response.Redirect("Index");
-            //}
-            //else
-            //{
-            //    loginmsg = "invalid username or password";
-            //    ViewData["Error"] = loginmsg;
-            //}
-
         }
     }
 }

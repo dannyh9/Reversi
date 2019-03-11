@@ -102,7 +102,9 @@ namespace Reversi.Controllers
                 }
                 else
                 {
-
+                    reader.Close();
+                    reader.Dispose();
+                    cmd2.Dispose();
                     if (password.Length < 10)
                     {
                         loginModel.ReturnMsg = "wachtwoord moet minimaal 10 tekens bevatten";
@@ -113,8 +115,8 @@ namespace Reversi.Controllers
                     }
                     else
                     {
+
                         //wachtwoord zijn goed
-                        con.Open();
                         SqlCommand cmd = new SqlCommand("INSERT INTO Users (Username, Password, Email) VALUES(@username,@password,@email)", con);
                         cmd.Parameters.AddWithValue("@username", username);
                         cmd.Parameters.AddWithValue("@password", SHA512(password));
@@ -122,9 +124,8 @@ namespace Reversi.Controllers
                         cmd.CommandType = System.Data.CommandType.Text;
                         cmd.ExecuteNonQuery();
                         cmd.Dispose();
-                        con.Close();
-                        loginModel.ReturnMsg = "Wachtwoord is aangepast";
-                        Logcontroller.addToLog(email, "Wachtwoord is aangepast");
+                        loginModel.ReturnMsg = "Account is aangemaakt";
+                        Logcontroller.addToLog(email, "Account is aangemaakt");
                     }
                 }
                 reader.Close();
