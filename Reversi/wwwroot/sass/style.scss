@@ -1,14 +1,18 @@
-﻿body {
+﻿$black-color: black;
+$px-border: 4px;
+$px-border-type: solid;
+
+body {
     font: 12pt Arial bold;
 }
 
 .rboard {
     border-collapse: collapse;
-    border: 4px solid black;
+    border: $px-border $px-border-type $black-color;
 }
 
 .rsquare {
-    border: 4px solid black;
+    border: $px-border $px-border-type $black-color;
 }
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
@@ -69,3 +73,4 @@ body {
     height: 60px;
     line-height: 60px; /* Vertically center the text there */
 }
+

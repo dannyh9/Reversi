@@ -1,4 +1,82 @@
-﻿let Game = (function () {
+$(document).ready(function () {
+    $("#newGameButton").click(function () {
+        var gameName = $("#newGame").val();
+        var spelerId = $("#spelerId").val();
+        Game.maakGame(gameName, spelerId);
+    });
+
+    $(".joinGameButton").click(function () {
+        var gameid = $(this).data("id");
+        localStorage.setItem('gameid', gameid);
+        localStorage.removeItem('color');
+        localStorage.setItem('color', 0);
+        Game.getGame(gameid);
+        setInterval(function () {
+            Game.getGame(gameid);
+            Game.getTurn(gameid);
+        }, 1000);
+    });
+    $('.rsquare').on("click", function () {
+        
+        
+    });
+    $(".white").click(function () {
+        localStorage.removeItem('color');
+        localStorage.setItem('color', 1);
+        $(".currentcolor").html('huidige kleur: wit');
+    });
+    $(".black").click(function () {
+        localStorage.removeItem('color');
+        localStorage.setItem('color', 2);
+        $(".currentcolor").html('huidige kleur: zwart');
+    });
+    $(document.body).on('click', '.rsquare', function () {
+        var location = $(this).data("location");
+        Game.doTurn(location);
+    });
+});
+
+let Ajax = (function () {
+    function sendGetRequest(url, onSuccess, onError) {
+        return sendRequest(url, null, 'GET', onSuccess, onError);
+    }
+
+    function sendPatchRequest(url, data, onSuccess, onError) {
+        return sendRequest(url, data, 'PATCH', onSuccess, onError);
+    }
+
+    function sendPutRequest(url, data, onSuccess, onError) {
+        return sendRequest(url, JSON.stringify(data), 'PUT', onSuccess, onError);
+    }
+
+    function sendPostRequest(url, data, onSuccess, onError) {
+        return sendRequest(url, JSON.stringify(data), 'POST', onSuccess, onError);
+    }
+
+    function sendDeleteRequest(url, onSuccess, onError) {
+        return sendRequest(url, null, 'DELETE', onSuccess, onError);
+    }
+
+    function sendRequest(url, data, verb, onSuccess, onError) {
+        var request = {
+            url: url,
+            type: verb,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: data,
+            success: onSuccess,
+            error: onError
+        };
+        return $.ajax(request);
+    }
+
+    return {
+        sendPostRequest: sendPostRequest,
+        sendGetRequest: sendGetRequest
+    };
+})();
+
+let Game = (function () {
 
     function maakGame(gameNaam, spelerId) {
         console.log("maak nieuw spel aan met naam : " + gameNaam + " Speler id: " + spelerId);

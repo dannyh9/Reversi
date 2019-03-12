@@ -13,6 +13,7 @@
         Game.getGame(gameid);
         setInterval(function () {
             Game.getGame(gameid);
+            Game.getTurn(gameid);
         }, 1000);
     });
     $('.rsquare').on("click", function () {
