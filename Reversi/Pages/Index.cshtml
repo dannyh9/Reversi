@@ -6,8 +6,8 @@
     //string username = Request.Cookies["Username"];
     if(ViewData["Username"] == null)
     {
-        ViewData["Username"] = "test";
-        //Response.Redirect("Login");
+        //ViewData["Username"] = "test";
+        Response.Redirect("Login");
     }
 }
 <div class="container">
@@ -43,24 +43,131 @@
                                 @item.GameId
                             </th>
                             <td>@item.Name</td>
-                            <td><button data-id="@item.GameId" class="joinGameButton"> Speel mee </button></td>
+                            <td><button data-id="@item.GameId" class="joinGameButton btn btn-primary"> Speel mee </button></td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
     </div>
+    <div class="spinner">
 
+    </div>
     <div class="game" style="display:none;">
         <div class="buttons">
             <p>kies een kleur:</p>
             <button class='white'>wit</button>
             <button class='black'>zwart</button>
             <p class='currentcolor'></p>
+            <p class='currentturn'></p>
         </div>
         <div class="gameScreen">
 
         </div>
     </div>
+    <div id="images">
+
+    </div>
+    <div class="popup-placeholder"></div>
+
+
+    <div id="chart">
+        <button id="randomizeData">Randomize Data</button>
+        <button id="addDataset">Add Dataset</button>
+        <button id="removeDataset">Remove Dataset</button>
+        <button id="addData">Add Data</button>
+        <button id="removeData">Remove Data</button>
+        <canvas id="canvas"></canvas>
+    </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script id="popup-template" type="text/x-handlebars-template">
+    <div id="popup" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h1> {{title}}</h1>
+            <p>
+                {{content}}
+            </p>
+        </div>
+
+    </div>
+</script>
 

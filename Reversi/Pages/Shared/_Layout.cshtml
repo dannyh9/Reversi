@@ -17,6 +17,7 @@
               integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
     </environment>
     <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -93,9 +94,15 @@
             crossorigin="anonymous"
             integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
     </script>
+    <script src="~/js/modules/PopupWidget.js" asp-append-version="true"></script>
     <script src="~/js/main.js" asp-append-version="true"></script>
     <script src="~/js/modules/Ajax.js" asp-append-version="true"></script>
     <script src="~/js/modules/Game.js" asp-append-version="true"></script>
+    <script src="~/js/modules/OnlineApi.js" asp-append-version="true"></script>
+    <script src="https://www.chartjs.org/dist/2.8.0/Chart.min.js" asp-append-version="true"></script>
+    <script src="https://www.chartjs.org/samples/latest/utils.js" asp-append-version="true"></script>
+    <script src="~/js/modules/chart.js" asp-append-version="true"></script>
+    <script src="~/js/modules/Bestelbroodje.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

@@ -10,16 +10,27 @@
 
         Ajax.sendPostRequest('api/reversi/game', data,
             function (response) {
-                alert(response);
+                //alert(response);
+                PopupWidget.popup("game gemaakt","content van de game");
             },
             function (result, status, xhr) {
-                alert(result.responseText);
+                //alert(result.responseText);
             });
     }
+
+    
+
     function getTurn(gameId) {
         Ajax.sendGetRequest('api/reversi/game/' + gameId +'/turn',
             function (response) {
+                var kleur = "";
                 console.log(response);
+                if (response === 1) {
+                    kleur = "wit";
+                } else {
+                    kleur = "zwart";
+                }
+                $(".currentturn").text('Nu aan de beurt: ' + kleur);
             },
             function (result, status, xhr) {
                 //response json
@@ -30,17 +41,17 @@
     function getGame(gameId) {
         Ajax.sendGetRequest('api/reversi/game/'+gameId,
             function (response) {
-                console.log(response);
-                //buildGame(response, gameId);
+                //console.log(response);
+                buildGame(response, gameId);
 
             },
             function (result, status, xhr) {
                 //response json
-                console.log(result, status, xhr);
+                //console.log(result, status, xhr);
             });
     }
 
-    function buildGame(gameData, gameId) {
+    function buildGame(gameData) {
         if (gameData === "DONE") {
             $(".gameFinder").show();
             $(".game").hide();
@@ -78,7 +89,7 @@
         color = localStorage.getItem('color');
 
         if (color === "0") {
-            alert("selecteer een kleur");
+            PopupWidget.popup("FOUT", "selecteer eerst een kleur");
         } else {
             //console.log(x, y, color, gameId);
 
@@ -90,10 +101,10 @@
 
             Ajax.sendPostRequest('api/reversi/game/'+gameId, data,
                 function (response) {
-                    alert(response);
+                    PopupWidget.popup("titel", response);
                 },
                 function (result, status, xhr) {
-                    alert(result.responseText);
+                    //alert(result.responseText);
                 });
         }
     }

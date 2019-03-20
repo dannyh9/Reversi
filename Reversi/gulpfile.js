@@ -1,7 +1,10 @@
 ﻿const gulp = require('gulp');
 var sass = require('gulp-sass');
 sass.compiler = require('node-sass');
+const handlebars = require('gulp-handlebars');
+const wrap = require('gulp-wrap');
 var uglify = require('gulp-uglify');
+const declare = require('gulp-declare');
 const {src, dest} = require('gulp');
 
 
@@ -35,6 +38,30 @@ gulp.task('js', function () {
         .pipe(gulp.dest('./wwwroot/dist'));
 });
 
+
+
+gulp.task('vendor', function () {
+    return gulp.src(['./wwwroot/vendor/handlebars-runtime-3/handlebars.js'])
+        .pipe(concat('vendor.js'))
+        .pipe(gulp.dest('./wwwroot/dist'));
+});
+
+gulp.task('templates', function () {
+    gulp.src(['./wwwroot/handlebars/*.hbs'])
+        .pipe(handlebars())
+        .pipe(wrap('Handlebars.template(<%= contents %>)'))
+        .pipe(declare({
+            namespace: 'spa_templates',
+            noRedeclare: true, // Avoid duplicate declarations
+            processName: function (filePath) {
+                return declare.processNameByPath(filePath.replace('client/templates/', ''));
+            }
+        }))
+        .pipe(concat('templates.js'))
+        .pipe(gulp.dest('./wwwroot/dist'));
+});
+
+
 gulp.task('sass:watch', function () {
-    gulp.watch('./wwwroot/sass/**/*.scss', ['sass']);
+    gulp.watch('./wwwroot/sass/*.scss', ['sass']);
 });

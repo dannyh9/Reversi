@@ -1,4 +1,10 @@
 ﻿$(document).ready(function () {
+
+    $(document.body).on('click', '.close', function () {
+        $('#popup').css("display", "none");
+    });
+
+    $('.spinner').hide();
     $("#newGameButton").click(function () {
         var gameName = $("#newGame").val();
         var spelerId = $("#spelerId").val();
@@ -10,16 +16,23 @@
         localStorage.setItem('gameid', gameid);
         localStorage.removeItem('color');
         localStorage.setItem('color', 0);
-        Game.getGame(gameid);
-        setInterval(function () {
+        $(".gameFinder").hide();
+        $('.spinner').show();
+        setTimeout(function () {
+            $('.spinner').hide();
             Game.getGame(gameid);
             Game.getTurn(gameid);
-        }, 1000);
-    });
-    $('.rsquare').on("click", function () {
+            Broodje.broodjeKlaarmaken();
+            Api.getImages();
+            //PopupWidget.popup("game opgestart", "content van de game");
+            setInterval(function () {
+                Game.getGame(gameid);
+                Game.getTurn(gameid);
+            }, 1000);
+        }, 3000);
         
-        
     });
+
     $(".white").click(function () {
         localStorage.removeItem('color');
         localStorage.setItem('color', 1);
@@ -28,8 +41,9 @@
     $(".black").click(function () {
         localStorage.removeItem('color');
         localStorage.setItem('color', 2);
-        $(".currentcolor").html('huidige kleur: zwart');
+        $(".currentcolor").html('Geselecteerde kleur: zwart');
     });
+
     $(document.body).on('click', '.rsquare', function () {
         var location = $(this).data("location");
         Game.doTurn(location);
