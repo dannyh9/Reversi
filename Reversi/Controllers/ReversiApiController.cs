@@ -26,8 +26,8 @@ namespace Reversi.Controllers
         public string GetGame(int id)
         {
             var game = _context.Games.First(a => a.GameId == id);
-
-            return game.Field.ToString();
+            string result = game.Field.ToString();
+            return result;
         }
 
         [Route("{id}/turn")]

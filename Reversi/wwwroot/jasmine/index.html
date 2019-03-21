@@ -1,98 +1,200 @@
 <html>
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery"
+            crossorigin="anonymous"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+    </script>
     <link rel="shortcut icon" type="image/png" href="jasmine/lib/jasmine/jasmine_favicon.png">
     <link rel="stylesheet" type="text/css" href="jasmine/lib/jasmine/jasmine.css">
     <script type="text/javascript" src="jasmine/lib/jasmine/jasmine.js"></script>
     <script type="text/javascript" src="jasmine/lib/jasmine/jasmine-html.js"></script>
     <script type="text/javascript" src="jasmine/lib/jasmine/boot.js"></script>
     <script type="text/javascript" src="jasmine/lib/jasmine/mock-ajax.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery"
+            crossorigin="anonymous"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+    </script>
+    <script src="../js/modules/PopupWidget.js" asp-append-version="true"></script>
+    <script src="../js/main.js" asp-append-version="true"></script>
+    <script src="../js/modules/Ajax.js" asp-append-version="true"></script>
+    <script src="../js/modules/Game.js" asp-append-version="true"></script>
+    <script src="../js/modules/OnlineApi.js" asp-append-version="true"></script>
+    <script src="../js/modules/Bestelbroodje.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
 </head>
 <body>
+    <div class="game" style="display:none;">
+        <div class="buttons">
+            <p>kies een kleur:</p>
+            <button class='white'>wit</button>
+            <button class='black'>zwart</button>
+            <p class='currentcolor'></p>
+            <p class='currentturn'></p>
+        </div>
+        <div class="gameScreen">
+        </div>
+    </div>
+    <script>
 
-<script>
+        /**
+         * De functie onder test
+         */
+        const getGame = function () {
+            return $.get('https://localhost:44323/api/reversi/game/1');
+        }
 
-    /**
-     * De functie onder test
-     */
-    const getWeather = function () {
-        return $.get('http://api.openweathermap.org/data/2.5/weather?q=Baarn&APPID=8fcf26b16c912c56bdbb840b5276b6c4');
-    }
+        describe("Mocking api request", function () {
 
-    describe("Mocking api request", function () {
-
-        beforeEach(function () {
-             jasmine.Ajax.install();
-        });
-
-        afterEach(function () {
-             jasmine.Ajax.uninstall();
-        });
-
-        it("should have responseText: 'abc'", function () {
-
-            let promiseGetWeather = getWeather();
-
-            let request = jasmine.Ajax.requests.mostRecent();
-
-
-            //mock het request met abs als ressultaat
-            request.respondWith({status: 'success', responseText: 'abc'});
-
-            console.log(request)
-            return expect(request.responseText).toBe('abc')
-        });
-    });
-
-    describe("Spy-ing weather api request", function () {
-
-        let onSuccess, onFailure, request;
-
-        beforeEach(function () {
-            jasmine.Ajax.install();
-
-            onSuccess = jasmine.createSpy('onSuccess');
-            onFailure = jasmine.createSpy('onFailure');
-
-            spyOn($, 'get').and.callFake(function (req) {
-                let d = $.Deferred();
-                // resolve using our mock data
-                let data = {x: 1, y: 2}
-                d.resolve(data);
-                return d.promise();
+            beforeEach(function () {
+                jasmine.Ajax.install();
             });
 
-        });
-
-        afterEach(function () {
-            jasmine.Ajax.uninstall();
-        });
-
-        describe("onSuccess", function () {
-            it("should not have called the spy onSuccess before doing the request", function () {
-                expect(onSuccess).not.toHaveBeenCalled();
+            afterEach(function () {
+                jasmine.Ajax.uninstall();
             });
 
-            it("after the request it should have called the spy onSuccess", function () {
-                getWeather()
-                    .done(function () {
-                        console.log('done!')
-                        return onSuccess();
-                    })
-                    .fail(function () {
-                        return onFailure();
-                    })
+            it("should have board", function () {
 
-                expect(onSuccess).toHaveBeenCalled();
-                expect(onFailure).not.toHaveBeenCalled();
+                Game.getGame(1);
+
+                let request = jasmine.Ajax.requests.mostRecent();
+
+                var gamedata = JSON.parse('[\r\n  [\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    1\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2\r\n  ],\r\n  [\r\n    1,\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    2\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    1,\r\n    2,\r\n    2\r\n  ],\r\n  [\r\n    2,\r\n    1,\r\n    1,\r\n    2,\r\n    1,\r\n    1,\r\n    1,\r\n    1\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    1,\r\n    1,\r\n    2,\r\n    2,\r\n    2,\r\n    1\r\n  ],\r\n  [\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    2,\r\n    2,\r\n    1\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    2,\r\n    2,\r\n    1\r\n  ]\r\n]');
+
+
+                //mock het request met 12345 als ressultaat
+                request.respondWith({ status: 'success', responseText: gamedata });
+
+                console.log(request);
+                //expect(request.responseText).toBe('1,2,3,4,5')
+
+                expect($('.gameScreen').children()).toContain($('.rboard')[0]);
             });
-        })
 
-    });
+            it("empty response", function () {
 
+                Game.getGame(1);
 
-</script>
+                let request = jasmine.Ajax.requests.mostRecent();
+                
+                request.respondWith({ status: 'error', responseText: "" });
+
+                console.log(request);
+
+                expect($('.gameScreen')).not.toContain($('.rboard')[0]);
+            });
+
+            it("Done response", function () {
+
+                Game.getGame(1);
+
+                let request = jasmine.Ajax.requests.mostRecent();
+
+                request.respondWith({ status: 'error', responseText: "DONE" });
+
+                console.log(request);
+
+                expect($('.gameScreen')).not.toContain($('.rboard')[0]);
+            });
+        });
+
+        describe("Spy-ing game api request", function () {
+
+            let onSuccess, onFailure, request;
+
+            beforeEach(function () {
+                jasmine.Ajax.install();
+
+                onSuccess = jasmine.createSpy('onSuccess');
+                onFailure = jasmine.createSpy('onFailure');
+
+                spyOn($, 'get').and.callFake(function (req) {
+                    let d = $.Deferred();
+                    let data = { x: 1, y: 2 }
+                    d.resolve(data);
+                    return d.promise();
+                });
+
+            });
+
+            afterEach(function () {
+                jasmine.Ajax.uninstall();
+            });
+
+            describe("onSuccess", function () {
+                it("should not have called the spy onSuccess before doing the request", function () {
+                    expect(onSuccess).not.toHaveBeenCalled();
+                });
+
+                it("after the request it should have called the spy onSuccess", function () {
+                    getGame()
+                        .done(function () {
+                            console.log('done!')
+                            return onSuccess();
+                        })
+                        .fail(function () {
+                            return onFailure();
+                        })
+
+                    expect(onSuccess).toHaveBeenCalled();
+                    expect(onFailure).not.toHaveBeenCalled();
+                });
+            })
+
+        });
+
+        describe("Show popup", function () {
+            var result;
+
+            result = PopupWidget.popup("game opgestart", "content van de game");
+
+            setTimeout(function () {
+                expect(result).toBe("done");
+            }, 1000);
+        });
+
+        describe("build game", function () {
+            var result;
+            var gamedata = JSON.parse('[\r\n  [\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    1\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2\r\n  ],\r\n  [\r\n    1,\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    2\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    1,\r\n    2,\r\n    2\r\n  ],\r\n  [\r\n    2,\r\n    1,\r\n    1,\r\n    2,\r\n    1,\r\n    1,\r\n    1,\r\n    1\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    1,\r\n    1,\r\n    2,\r\n    2,\r\n    2,\r\n    1\r\n  ],\r\n  [\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    2,\r\n    2,\r\n    1\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    2,\r\n    2,\r\n    1\r\n  ]\r\n]');
+            
+            result = Game.buildGame(gamedata);
+
+            setTimeout(function () {
+                expect(result).toBe("done");
+            }, 1000);
+        });
+
+        describe("get game", function () {
+            //var result;
+            //var gamedata = JSON.parse('[\r\n  [\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    1\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2\r\n  ],\r\n  [\r\n    1,\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    2\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    1,\r\n    2,\r\n    2\r\n  ],\r\n  [\r\n    2,\r\n    1,\r\n    1,\r\n    2,\r\n    1,\r\n    1,\r\n    1,\r\n    1\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    1,\r\n    1,\r\n    2,\r\n    2,\r\n    2,\r\n    1\r\n  ],\r\n  [\r\n    2,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    2,\r\n    2,\r\n    1\r\n  ],\r\n  [\r\n    1,\r\n    2,\r\n    1,\r\n    2,\r\n    2,\r\n    2,\r\n    2,\r\n    1\r\n  ]\r\n]');
+
+            it("get game", function (done) {
+                Game.getGame(1);
+                expect($('.gameScreen').children()).toContain($('.rboard')[0]);
+                done();
+            });
+           
+        
+                //expect('.GameScreen').toContainText('rboard');
+        });
+
+        describe("get turn", function () {
+
+            Game.getTurn(1);
+
+            it("get game", function (done) {
+                Game.getGame(1);
+                expect($('.buttons').children()).toContain($('.currentturn')[0]);
+                done();
+            });
+                
+        });
+
+    </script>
 
 
 </body>

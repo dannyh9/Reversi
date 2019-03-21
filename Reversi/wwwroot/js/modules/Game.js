@@ -52,33 +52,38 @@
     }
 
     function buildGame(gameData) {
-        if (gameData === "DONE") {
-            $(".gameFinder").show();
-            $(".game").hide();
-        } else {
-            $(".gameFinder").hide();
-            var gamehtml = '<table style="margin-top: 20px;" class="rboard" cellspacing="0" cellpadding="0">';
-            for (i = 0; i < gameData.length; i++){
-                gamehtml += '<tr>';
-                for (ii = 0; ii < gameData[i].length; ii++) {
-                    gamehtml += '<td class="rsquare" data-location="' + i + ii + '" >';
-                    if (gameData[i][ii] === 1) {
-                        gamehtml += "<img src='images/white.gif'>";
-                    } else if (gameData[i][ii] === 2) {
-                        gamehtml += "<img src='images/black.gif'>";
-                    } else {
-                        gamehtml += "<img src='images/green.gif'>";
+        if (gameData !== undefined) {
+            
+            if (gameData === "DONE") {
+                $(".gameFinder").show();
+                $(".game").hide();
+                $(".gameScreen").html("");
+            } else {
+                $(".gameFinder").hide();
+                var gamehtml = '<table style="margin-top: 20px;" class="rboard" cellspacing="0" cellpadding="0">';
+                for (i = 0; i < gameData.length; i++) {
+                    gamehtml += '<tr>';
+                    for (ii = 0; ii < gameData[i].length; ii++) {
+                        gamehtml += '<td class="rsquare" data-location="' + i + ii + '" >';
+                        if (gameData[i][ii] === 1) {
+                            gamehtml += "<img src='images/white.gif'>";
+                        } else if (gameData[i][ii] === 2) {
+                            gamehtml += "<img src='images/black.gif'>";
+                        } else {
+                            gamehtml += "<img src='images/green.gif'>";
+                        }
+                        gamehtml += '</td>';
+
                     }
-                    gamehtml += '</td>';
-                    
+                    gamehtml += '</tr>';
                 }
-                gamehtml += '</tr>';
+                gamehtml += '</table>';
+                $(".gameScreen").html(gamehtml);
+                $(".game").show();
             }
-            gamehtml += '</table>';
-            $(".gameScreen").html(gamehtml);
-            $(".game").show();
+        }else  {
+            $(".gameScreen").html("");
         }
-        
     }
 
     function doTurn(location) {
@@ -96,7 +101,7 @@
             var data = {
                 X: x,
                 Y: y,
-                Color: color,
+                Color: color
             };
 
             Ajax.sendPostRequest('api/reversi/game/'+gameId, data,
