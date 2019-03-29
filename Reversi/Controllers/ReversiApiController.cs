@@ -30,15 +30,6 @@ namespace Reversi.Controllers
             return result;
         }
 
-        [Route("{id}/turn")]
-        [HttpGet]
-        public string GetTurn(int id)
-        {
-            var game = _context.Games.First(a => a.GameId == id);
-
-            return game.Turn.ToString();
-        }
-
 
         [HttpPost]
         public string PostNewGame([FromBody] JObject data)
@@ -141,7 +132,7 @@ namespace Reversi.Controllers
                 
             }else
             {
-                return "deze kleur is niet aan zet";
+                return "Deze kleur is niet aan zet";
             }
 
            
