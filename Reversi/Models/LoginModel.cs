@@ -12,7 +12,7 @@ namespace Reversi.Models
         public int Role { get; set; }
         public bool returnbool = false;
         public string ReturnMsg { get; set; }
-        public string Auth { get; set;}
+        public int Auth { get; set;}
         public Guid token { get; set; }
     }
 }

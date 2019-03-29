@@ -28,7 +28,7 @@ namespace Reversi.Pages
             }
         }
 
-        public void OnPost(string Username, string Password)
+        public void OnPost(string Username, string Password, string verify)
         {
             if (!ReCaptchaPassed(Request.Form["g-recaptcha-response"], "6LdY4pMUAAAAAHnVKHn4WS-qsDHqrrQABJxCQ6vk"))
             {
@@ -46,7 +46,7 @@ namespace Reversi.Pages
                     }
                     else
                     {
-                        if(Logincontroller.loginModel.Auth == "2")
+                        if(verify == "Yes")
                         {
                             Random generator = new Random();
                             string randomnumber = generator.Next(0, 999999).ToString("D6");

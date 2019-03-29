@@ -39,7 +39,6 @@ namespace Reversi.Controllers
                         loginModel.Username = reader["Username"].ToString();
                         loginModel.Role = int.Parse(reader["Role"].ToString());
                         loginModel.Email = reader["Email"].ToString();
-                        loginModel.Auth = reader["Auth"].ToString();
                         loginModel.returnbool = true;
                     }
                     else
